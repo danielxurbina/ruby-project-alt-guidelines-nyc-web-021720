@@ -1,43 +1,34 @@
-# require_relative '../lib/game.rb'
-# require_relative '../lib/team.rb'
+require_relative '../lib/game.rb'
+require_relative '../lib/team.rb'
 
-def welcome 
-  puts "Welcome League Manager! Let's schedule an NBA game!"
-end
+class CommandLineInterface
 
-def create_game
-  puts "Pick your home team"
-  home_team = gets.chomp.capitalize 
-  
-  puts "Pick your away team"
-  away_team = gets.chomp.capitalize 
+  def welcome 
+    puts "Welcome League Manager! Let's schedule an NBA game!"
+  end
 
-  puts "You picked the #{home_team} to play against the #{away_team}" 
+  #this method will give user an option to pick their home and away team
+  def create_game
+    puts "Pick your home team"
+    home_team = gets.chomp.capitalize 
 
-  # Game.create(Team.find_by(name:"#{home_team}")., Team.find_or_create_by(name:"#{away_team}"))
+    puts "Pick your away team"
+    away_team = gets.chomp.capitalize 
+    
 
-  # team = Team.where('name LIKE ?', '%' + "#{home_team}" + '%') 
-  # puts team 
-  
-end
+    home_team_id = Team.where('name LIKE ?', '%' + "#{home_team}" + '%').ids.pop
+    away_team_id = Team.where('name LIKE ?', '%' + "#{away_team}" + '%').ids.pop 
 
-# def find_team
-#   # name = if "#{home_team}".match(//)
+    db_home_team = Team.where('name LIKE ?', '%' + "#{home_team}" + '%').pluck(:name).pop 
+    db_away_team = Team.where('name LIKE ?', '%' + "#{away_team}" + '%').pluck(:name).pop 
 
-#   team = Team.where('name LIKE ?', '%' + "#{home_team}" + '%')
-#   puts "I found #{team}!"
-  
-# end
+   
+    game = Game.create(home_team_id: home_team_id, away_team_id: away_team_id)
 
+    puts "Great! You scheduled the #{db_home_team} to play against the #{db_away_team}!"
+    
+  end
 
-# def first_team_name
-#   Team.first.name
-# end
+end  
 
-
-# # Find the first user named "PenÃ©lope" or create a new one.
-# User.find_or_create_by(first_name: 'PenÃ©lope')
-# => #<User id: 1, first_name: "PenÃ©lope", last_name: nil>
-
-#{}
 
